@@ -3,7 +3,34 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>eda</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>eda</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script>
+(function() {
+  function addWidgetsRenderer() {
+    var mimeElement = document.querySelector('script[type="application/vnd.jupyter.widget-view+json"]');
+    var scriptElement = document.createElement('script');
+    
+    var widgetRendererSrc = 'https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js';
+    
+    var widgetState;
+
+    // Fallback for older version:
+    try {
+      widgetState = mimeElement && JSON.parse(mimeElement.innerHTML);
+
+      if (widgetState && (widgetState.version_major < 2 || !widgetState.version_major)) {
+        
+        var widgetRendererSrc = 'https://unpkg.com/@jupyter-js-widgets@*/dist/embed.js';
+        
+      }
+    } catch(e) {}
+
+    scriptElement.src = widgetRendererSrc;
+    document.body.appendChild(scriptElement);
+  }
+
+  document.addEventListener('DOMContentLoaded', addWidgetsRenderer);
+}());
+</script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -8641,6 +8668,17 @@ stores + skus ──▶ inventory        skus ──▶ flags
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jupyter-widgets jp-OutputArea-output" id="ff4f2e13-4115-4a74-9adf-1823ea50eac7" tabindex="0">
+<script type="text/javascript">
+var element = document.getElementById('ff4f2e13-4115-4a74-9adf-1823ea50eac7');
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "5efa79d2c7514784becd9ab9f138addd", "version_major": 2, "version_minor": 0}
+</script>
+</div>
+</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
@@ -10135,6 +10173,17 @@ For forecasting this means: model the top SKUs individually, and forecast the lo
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jupyter-widgets jp-OutputArea-output" id="a644c173-7cc2-4b2c-831e-43481afb2f0f" tabindex="0">
+<script type="text/javascript">
+var element = document.getElementById('a644c173-7cc2-4b2c-831e-43481afb2f0f');
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "2e3796f192604093bb971b5ba81e6e8f", "version_major": 2, "version_minor": 0}
+</script>
+</div>
+</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
@@ -10476,7 +10525,7 @@ Customers whose Q4 spend fell by more than 40% year-on-year: 7.4%
 <span class="s1">           FROM sales GROUP BY 1 ORDER BY 1'''</span><span class="p">)</span>
 <span class="n">first</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="s2">"SELECT DATE_TRUNC('quarter', MIN(date)) AS qtr, COUNT(*) new_customers FROM sales GROUP BY customer_id"</span><span class="p">)</span>
 <span class="n">act</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">first</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'qtr'</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">'new_customers'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">on</span><span class="o">=</span><span class="s1">'qtr'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">ch</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="s2">"SELECT channel, COUNT(*) lines, SUM(total_value) revenue, SUM(total_value)/COUNT(DISTINCT receipt_id) basket_value FROM sales GROUP BY 1"</span><span class="p">)</span>
+<span class="n">ch</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="s2">"SELECT channel, COUNT(*) lines, SUM(total_value) revenue, SUM(total_value)/COUNT(DISTINCT receipt_id) basket_value FROM sales GROUP BY 1 ORDER BY revenue DESC"</span><span class="p">)</span>
 <span class="n">ch</span><span class="p">[</span><span class="s1">'revenue_share_pct'</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">revenue</span> <span class="o">/</span> <span class="n">ch</span><span class="o">.</span><span class="n">revenue</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
 <span class="n">display</span><span class="p">(</span><span class="n">act</span><span class="p">);</span> <span class="n">display</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
 </pre></div>
@@ -11157,21 +11206,21 @@ there is enough variation to learn from. We will confirm the exact threshold in 
 <tbody>
 <tr>
 <th>0</th>
-<td>True</td>
-<td>2090351</td>
-<td>1.88</td>
-<td>833.46</td>
-<td>1,742,233,472.42</td>
-<td>20.96</td>
-</tr>
-<tr>
-<th>1</th>
 <td>False</td>
 <td>7881687</td>
 <td>1.88</td>
 <td>1,164.15</td>
 <td>9,175,503,820.97</td>
 <td>79.04</td>
+</tr>
+<tr>
+<th>1</th>
+<td>True</td>
+<td>2090351</td>
+<td>1.88</td>
+<td>833.46</td>
+<td>1,742,233,472.42</td>
+<td>20.96</td>
 </tr>
 </tbody>
 </table>
@@ -11995,7 +12044,7 @@ Stockout windows are all in the last ~75 days of 2025.</li>
   <span class="s1">'sales inside own stockout windows'</span><span class="p">:</span> <span class="p">[</span><span class="n">window_sales</span><span class="p">(</span><span class="s1">''</span><span class="p">),</span> <span class="n">window_sales</span><span class="p">(</span><span class="s1">'_alt'</span><span class="p">)],</span>
 <span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">'retail_clean_dataset'</span><span class="p">,</span> <span class="s1">'retail_contaminated_dataset'</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 <span class="n">display</span><span class="p">(</span><span class="n">cmp</span><span class="p">)</span>
-<span class="n">same</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="s1">'''SELECT a.flag, COUNT(*) skus_flagged_in_both FROM flags a JOIN flags_alt b USING(sku_id, flag) GROUP BY 1'''</span><span class="p">)</span>
+<span class="n">same</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="s1">'''SELECT a.flag, COUNT(*) skus_flagged_in_both FROM flags a JOIN flags_alt b USING(sku_id, flag) GROUP BY 1 ORDER BY 1'''</span><span class="p">)</span>
 <span class="n">same</span>
 </pre></div>
 </div>
@@ -12230,4 +12279,7 @@ contain the stockout gaps, which matters when we split train/test for forecastin
 </div>
 </main>
 </body>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"2e3796f192604093bb971b5ba81e6e8f": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_f8749305c1704aec8dee264be9207e9a", "max": 100.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_aa62418de09e4b8694943d9900bfa265", "tabbable": null, "tooltip": null, "value": 100.0}}, "2f4740e6eb3f496687d96af5a304f221": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "auto"}}, "5efa79d2c7514784becd9ab9f138addd": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets\/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_2f4740e6eb3f496687d96af5a304f221", "max": 100.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_b4ab4456fffd40968d2fc589b2b27746", "tabbable": null, "tooltip": null, "value": 100.0}}, "aa62418de09e4b8694943d9900bfa265": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": "black", "description_width": ""}}, "b4ab4456fffd40968d2fc589b2b27746": {"model_module": "@jupyter-widgets\/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets\/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": "black", "description_width": ""}}, "f8749305c1704aec8dee264be9207e9a": {"model_module": "@jupyter-widgets\/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets\/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets\/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "auto"}}}, "version_major": 2, "version_minor": 0}
+</script>
 </html>

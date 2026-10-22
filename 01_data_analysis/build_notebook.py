@@ -353,7 +353,7 @@ act = q('''SELECT DATE_TRUNC('quarter', date) AS qtr, COUNT(DISTINCT customer_id
            FROM sales GROUP BY 1 ORDER BY 1''')
 first = q("SELECT DATE_TRUNC('quarter', MIN(date)) AS qtr, COUNT(*) new_customers FROM sales GROUP BY customer_id")
 act = act.merge(first.groupby('qtr').size().rename('new_customers').reset_index(), on='qtr', how='left').fillna(0)
-ch = q("SELECT channel, COUNT(*) lines, SUM(total_value) revenue, SUM(total_value)/COUNT(DISTINCT receipt_id) basket_value FROM sales GROUP BY 1")
+ch = q("SELECT channel, COUNT(*) lines, SUM(total_value) revenue, SUM(total_value)/COUNT(DISTINCT receipt_id) basket_value FROM sales GROUP BY 1 ORDER BY revenue DESC")
 ch['revenue_share_pct'] = ch.revenue / ch.revenue.sum() * 100
 display(act); display(ch)
 """)
@@ -498,7 +498,7 @@ cmp = pd.DataFrame({
   'sales inside own stockout windows': [window_sales(''), window_sales('_alt')],
 }, index=['retail_clean_dataset', 'retail_contaminated_dataset']).T
 display(cmp)
-same = q('''SELECT a.flag, COUNT(*) skus_flagged_in_both FROM flags a JOIN flags_alt b USING(sku_id, flag) GROUP BY 1''')
+same = q('''SELECT a.flag, COUNT(*) skus_flagged_in_both FROM flags a JOIN flags_alt b USING(sku_id, flag) GROUP BY 1 ORDER BY 1''')
 same
 """)
 md("""

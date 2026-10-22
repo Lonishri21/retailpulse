@@ -1,6 +1,7 @@
 pandas
 numpy
 pyarrow
+duckdb
 openpyxl
 scipy
 scikit-learn
