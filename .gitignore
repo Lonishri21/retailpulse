@@ -1,0 +1,27 @@
+# Python / environment
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Regenerable caches (rebuilt by the notebooks from the CSVs)
+01_data_analysis/cache/
+data/raw/
+data/processed/*.parquet
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Power BI / OS / editor
+*.pbix.bak
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Large raw data (>100 MB) - download separately, see README "Data" section
+retail_clean_dataset/sales_transactions.csv
+retail_contaminated_dataset/sales_transactions.csv
+
+# Stray unrun notebook copy; the real one is 01_data_analysis/eda.ipynb
+/eda.ipynb
