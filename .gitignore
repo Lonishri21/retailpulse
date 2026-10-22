@@ -5,7 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Regenerable caches (rebuilt by the notebooks from the CSVs)
-01_data_analysis/cache/
+data/cache/
 data/raw/
 data/processed/*.parquet
 
@@ -23,5 +23,5 @@ Thumbs.db
 retail_clean_dataset/sales_transactions.csv
 retail_contaminated_dataset/sales_transactions.csv
 
-# Stray unrun notebook copy; the real one is 01_data_analysis/eda.ipynb
+# Stray unrun notebook copy; the real one is notebooks/01_eda.ipynb
 /eda.ipynb

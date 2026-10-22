@@ -9,8 +9,8 @@ Data: a synthetic retail chain in Pakistan — 30 stores, 5,000 SKUs, 10,000 cus
 | Step | Status | Output |
 |---|---|---|
 | 0. Setup — repo, environment, folder structure | ✅ Done | `requirements.txt`, project folders |
-| 1. Exploratory data analysis | ✅ Done | [`01_data_analysis/eda.ipynb`](01_data_analysis/eda.ipynb) (HTML: `eda.html`), figures in `01_data_analysis/figures/` |
-| 2. Feature engineering | ✅ Done | [`notebooks/02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb), tables in `data/processed/`, figures in `reports/figures/` |
+| 1. Exploratory data analysis | ✅ Done | [`notebooks/01_eda.ipynb`](notebooks/01_eda.ipynb) (HTML: [`reports/01_eda.html`](reports/01_eda.html)), figures `reports/figures/01_*.png` |
+| 2. Feature engineering | ✅ Done | [`notebooks/02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb), tables in `data/processed/`, figures `reports/figures/02*.png` |
 | 3. Customer segmentation (RFM + K-Means) | ⏳ Next | |
 | 4. Churn prediction (time-split, no leakage) | ⏳ | |
 | 5. Demand forecasting (Prophet, LSTM, hybrid) | ⏳ | |
@@ -22,13 +22,17 @@ Data: a synthetic retail chain in Pakistan — 30 stores, 5,000 SKUs, 10,000 cus
 ## Project structure
 
 ```
-├── 01_data_analysis/        # Step 1: EDA notebook, HTML export, figures
-├── notebooks/               # Step 2 onwards, one notebook per step
+├── notebooks/               # one notebook per step: 01_eda, 02_feature_engineering, ...
 ├── src/                     # reusable code used by notebooks, tests and the app
 │   ├── cleaning.py          #   load + clean sales (DuckDB)
 │   └── features.py          #   customer, daily, weekly, SKU and inventory features
-├── data/processed/          # feature tables produced by the notebooks
-├── reports/figures/         # charts from Step 2 onwards
+├── data/
+│   ├── processed/           # feature tables produced by the notebooks
+│   └── cache/               # Parquet copies of the sales CSVs (git-ignored, rebuilt automatically)
+├── reports/
+│   ├── figures/             # all charts, prefixed by step (01_*, 02_*)
+│   └── 01_eda.html          # HTML export of the EDA notebook
+├── scripts/                 # helper scripts (e.g. regenerate the EDA notebook)
 ├── retail_clean_dataset/        # main dataset (small CSVs in git, see "Data setup")
 ├── retail_contaminated_dataset/ # second version of the dataset (used for comparison)
 ├── docs/DATASET.md          # dataset documentation
@@ -55,7 +59,7 @@ The two `sales_transactions.csv` files (~770 MB each) are **not stored in git** 
    - `retail_clean_dataset/sales_transactions.csv`
    - `retail_contaminated_dataset/sales_transactions.csv`
 3. Run the notebooks in order:
-   - `01_data_analysis/eda.ipynb` — builds a Parquet cache in `01_data_analysis/cache/`
+   - `notebooks/01_eda.ipynb` — builds a Parquet cache in `data/cache/`
    - `notebooks/02_feature_engineering.ipynb` — builds `data/processed/sales_clean.parquet` and the feature tables
 
 The Parquet files are rebuilt automatically and are git-ignored.

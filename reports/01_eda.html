@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>eda</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script>
+<title>01_eda</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script>
 (function() {
   function addWidgetsRenderer() {
     var mimeElement = document.querySelector('script[type="application/vnd.jupyter.widget-view+json"]');
@@ -7872,12 +7872,12 @@ a.anchor-link {
 <span class="n">ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">'..'</span><span class="p">)</span>
 <span class="n">MAIN</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'retail_clean_dataset'</span>          <span class="c1"># main dataset used in this notebook</span>
 <span class="n">ALT</span>  <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'retail_contaminated_dataset'</span>   <span class="c1"># second version, compared in section 10</span>
-<span class="n">FIG</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">'figures'</span><span class="p">);</span> <span class="n">FIG</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">CACHE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">'cache'</span><span class="p">);</span> <span class="n">CACHE</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">FIG</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'reports'</span> <span class="o">/</span> <span class="s1">'figures'</span><span class="p">;</span> <span class="n">FIG</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">CACHE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'data'</span> <span class="o">/</span> <span class="s1">'cache'</span><span class="p">;</span> <span class="n">CACHE</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">con</span> <span class="o">=</span> <span class="n">duckdb</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">q</span><span class="p">(</span><span class="n">sql</span><span class="p">):</span>  <span class="k">return</span> <span class="n">con</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">name</span><span class="p">):</span> <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.png'</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">name</span><span class="p">):</span> <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">FIG</span> <span class="o">/</span> <span class="sa">f</span><span class="s1">'01_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.png'</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
 <span class="n">millions</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">x</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="s1">,.0f</span><span class="si">}</span><span class="s1">M'</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -8668,17 +8668,6 @@ stores + skus ──▶ inventory        skus ──▶ flags
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jupyter-widgets jp-OutputArea-output" id="ff4f2e13-4115-4a74-9adf-1823ea50eac7" tabindex="0">
-<script type="text/javascript">
-var element = document.getElementById('ff4f2e13-4115-4a74-9adf-1823ea50eac7');
-</script>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "5efa79d2c7514784becd9ab9f138addd", "version_major": 2, "version_minor": 0}
-</script>
-</div>
-</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
@@ -10173,17 +10162,6 @@ For forecasting this means: model the top SKUs individually, and forecast the lo
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jupyter-widgets jp-OutputArea-output" id="a644c173-7cc2-4b2c-831e-43481afb2f0f" tabindex="0">
-<script type="text/javascript">
-var element = document.getElementById('a644c173-7cc2-4b2c-831e-43481afb2f0f');
-</script>
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "2e3796f192604093bb971b5ba81e6e8f", "version_major": 2, "version_minor": 0}
-</script>
-</div>
-</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
@@ -11865,21 +11843,21 @@ Name: % of rows, dtype: float64</pre>
 <tbody>
 <tr>
 <th>0</th>
-<td>STOCKOUT_RISK</td>
-<td>200</td>
-<td>13.69</td>
-<td>2025-10-17</td>
-<td>2025-12-31</td>
-<td>18.68</td>
-</tr>
-<tr>
-<th>1</th>
 <td>SLOW_MOVER</td>
 <td>400</td>
 <td>22.73</td>
 <td>NaT</td>
 <td>NaT</td>
 <td>NaN</td>
+</tr>
+<tr>
+<th>1</th>
+<td>STOCKOUT_RISK</td>
+<td>200</td>
+<td>13.69</td>
+<td>2025-10-17</td>
+<td>2025-12-31</td>
+<td>18.68</td>
 </tr>
 </tbody>
 </table>

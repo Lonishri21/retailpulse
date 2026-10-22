@@ -37,7 +37,7 @@ def build_clean_sales(source: Path, out_path: Path, con: duckdb.DuckDBPyConnecti
         COPY (
             SELECT DISTINCT * FROM {raw}
             WHERE quantity > 0
-            ORDER BY date, receipt_id
+            ORDER BY ALL   -- full sort, so the file (and every later sum) is identical on each run
         ) TO '{out_path.as_posix()}' (FORMAT parquet)
     """)
     n_clean = con.sql(f"SELECT COUNT(*) FROM read_parquet('{out_path.as_posix()}')").fetchone()[0]
@@ -48,6 +48,9 @@ def connect(data_dir: Path, sales_parquet: Path) -> duckdb.DuckDBPyConnection:
     """Open DuckDB with one view per table: sales, stores, skus, customers, promos, inventory, flags."""
     con = duckdb.connect()
     con.execute("SET enable_progress_bar = false")
+    # One thread adds numbers in a fixed order, so feature values are identical on every run
+    # (multi-threaded sums can differ in the last digits). Costs ~10s on the full dataset.
+    con.execute("SET threads = 1")
     con.sql(f"CREATE VIEW sales AS SELECT * FROM read_parquet('{Path(sales_parquet).as_posix()}')")
     for view, file in DIMENSIONS.items():
         path = (Path(data_dir) / f"{file}.csv").as_posix()

@@ -1,4 +1,6 @@
-"""Builds eda.ipynb (the Step 1 data analysis notebook). Run: python build_notebook.py"""
+"""Builds notebooks/01_eda.ipynb (the Step 1 data analysis notebook). Run: python scripts/build_01_eda_notebook.py"""
+from pathlib import Path
+
 import nbformat as nbf
 
 cells = []
@@ -33,12 +35,12 @@ plt.rcParams.update({'figure.figsize': (11, 4.5), 'figure.dpi': 110, 'axes.title
 ROOT = Path('..')
 MAIN = ROOT / 'retail_clean_dataset'          # main dataset used in this notebook
 ALT  = ROOT / 'retail_contaminated_dataset'   # second version, compared in section 10
-FIG = Path('figures'); FIG.mkdir(exist_ok=True)
-CACHE = Path('cache'); CACHE.mkdir(exist_ok=True)
+FIG = ROOT / 'reports' / 'figures'; FIG.mkdir(parents=True, exist_ok=True)
+CACHE = ROOT / 'data' / 'cache'; CACHE.mkdir(parents=True, exist_ok=True)
 
 con = duckdb.connect()
 def q(sql):  return con.sql(sql).df()
-def save(name): plt.savefig(FIG / f'{name}.png', bbox_inches='tight')
+def save(name): plt.savefig(FIG / f'01_{name}.png', bbox_inches='tight')
 millions = mt.FuncFormatter(lambda x, _: f'{x/1e6:,.0f}M')
 """)
 
@@ -559,5 +561,6 @@ md("""
 
 nb = nbf.v4.new_notebook(); nb.cells = cells
 nb.metadata['kernelspec'] = {'name': 'python3', 'display_name': 'Python 3', 'language': 'python'}
-nbf.write(nb, 'eda.ipynb')
-print('wrote eda.ipynb with', len(cells), 'cells')
+out = Path(__file__).resolve().parent.parent / 'notebooks' / '01_eda.ipynb'
+nbf.write(nb, out)
+print('wrote', out, 'with', len(cells), 'cells')
