@@ -1,13 +1,9 @@
-"""Load and clean the RetailPulse data.
-
-Shared by the notebooks, tests and the app so that every step cleans data the same way.
-All heavy work runs in DuckDB, so the 10M-row sales file is never fully loaded into pandas.
-"""
+"""Load and clean the sales data with DuckDB."""
 from pathlib import Path
 
 import duckdb
 
-# Small dimension tables: view name -> CSV file name (without .csv)
+# view name -> CSV file name
 DIMENSIONS = {
     "stores": "store_master",
     "skus": "sku_master",
@@ -19,13 +15,7 @@ DIMENSIONS = {
 
 
 def build_clean_sales(source: Path, out_path: Path, con: duckdb.DuckDBPyConnection) -> dict:
-    """Write the cleaned sales table to parquet and return a cleaning log.
-
-    `source` can be the raw CSV or an existing parquet copy of it.
-    Cleaning rules (from the Step 1 EDA):
-      - remove exact duplicate rows (the same line recorded twice)
-      - drop rows with quantity <= 0 (none expected, kept as a safety net)
-    """
+    """Remove exact duplicates and quantity <= 0, save as parquet, return row counts."""
     con.execute("SET enable_progress_bar = false")
     source, out_path = Path(source), Path(out_path)
     reader = "read_parquet" if source.suffix == ".parquet" else "read_csv_auto"
@@ -37,7 +27,7 @@ def build_clean_sales(source: Path, out_path: Path, con: duckdb.DuckDBPyConnecti
         COPY (
             SELECT DISTINCT * FROM {raw}
             WHERE quantity > 0
-            ORDER BY ALL   -- full sort, so the file (and every later sum) is identical on each run
+            ORDER BY ALL
         ) TO '{out_path.as_posix()}' (FORMAT parquet)
     """)
     n_clean = con.sql(f"SELECT COUNT(*) FROM read_parquet('{out_path.as_posix()}')").fetchone()[0]
@@ -45,11 +35,10 @@ def build_clean_sales(source: Path, out_path: Path, con: duckdb.DuckDBPyConnecti
 
 
 def connect(data_dir: Path, sales_parquet: Path) -> duckdb.DuckDBPyConnection:
-    """Open DuckDB with one view per table: sales, stores, skus, customers, promos, inventory, flags."""
+    """Open DuckDB with a view for each table."""
     con = duckdb.connect()
     con.execute("SET enable_progress_bar = false")
-    # One thread adds numbers in a fixed order, so feature values are identical on every run
-    # (multi-threaded sums can differ in the last digits). Costs ~10s on the full dataset.
+    # single thread = reproducible sums
     con.execute("SET threads = 1")
     con.sql(f"CREATE VIEW sales AS SELECT * FROM read_parquet('{Path(sales_parquet).as_posix()}')")
     for view, file in DIMENSIONS.items():
