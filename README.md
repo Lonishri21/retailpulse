@@ -37,7 +37,6 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 ├── retail_contaminated_dataset/ # second version of the dataset (used for comparison)
 ├── docs/DATASET.md          # dataset documentation
 ├── models/                  # saved models (kmeans_segments.pkl, ...)
-├── app/  api/  powerbi/  tests/   # filled in by later steps
 ├── requirements.txt         # dependencies
 └── requirements-lock.txt    # exact versions
 ```
