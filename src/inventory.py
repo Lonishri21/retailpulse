@@ -12,7 +12,7 @@ def reorder_point(weekly_demand, ss, lead_weeks=1):
 
 
 def eoq(weekly_demand, order_cost, holding_rate, unit_cost):
-    """Economic order quantity; annual demand = 52 x weekly demand, holding cost = rate x unit cost per year."""
+    """EOQ, with annual demand = 52 x weekly demand."""
     return np.sqrt(2 * 52 * weekly_demand * order_cost / (holding_rate * unit_cost))
 
 
@@ -25,12 +25,8 @@ def abc_class(revenue: pd.Series) -> pd.Series:
 
 
 def simulate(demand, rop, q, start, lead_weeks=1):
-    """Weekly (ROP, multiple-of-Q) policy.
-
-    Each week: deliveries arrive, customers buy what is on the shelf, then if stock on hand plus
-    on order is at or below the reorder point, order the smallest multiple of Q that lifts it above.
-    `rop` and `q` can be numbers or one value per week (the policy for the following week).
-    """
+    """Weekly reorder-point policy: when stock + on order <= rop, order the smallest multiple
+    of q that gets back above it. rop and q can be numbers or one value per week."""
     demand = np.asarray(demand, float)
     rop, q = np.broadcast_to(rop, demand.shape), np.broadcast_to(q, demand.shape)
     stock, pipeline = float(start), [0.0] * lead_weeks
@@ -52,7 +48,7 @@ def simulate(demand, rop, q, start, lead_weeks=1):
 
 
 def simulate_naive(demand, start, lead_weeks=1):
-    """Naive policy: each week, order what sold that week."""
+    """Each week, reorder whatever sold."""
     demand = np.asarray(demand, float)
     stock, pipeline = float(start), [0.0] * lead_weeks
     levels, orders, sold_total, short_weeks = [], [], 0.0, 0

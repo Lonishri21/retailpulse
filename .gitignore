@@ -1,10 +1,12 @@
-# Python / environment
+# Python
 .venv/
 __pycache__/
+.pytest_cache/
+.ruff_cache/
 *.pyc
 .ipynb_checkpoints/
 
-# Regenerable caches (rebuilt by the notebooks from the CSVs)
+# rebuilt by the notebooks
 data/cache/
 data/raw/
 data/processed/*.parquet
@@ -13,15 +15,12 @@ data/processed/*.parquet
 mlruns/
 mlflow.db
 
-# Power BI / OS / editor
-*.pbix.bak
+# OS / editor
 .DS_Store
 Thumbs.db
 .vscode/
 
-# Large raw data (>100 MB) - download separately, see README "Data" section
+# raw sales files are too big for GitHub (see README)
 retail_clean_dataset/sales_transactions.csv
 retail_contaminated_dataset/sales_transactions.csv
 
-# Stray unrun notebook copy; the real one is notebooks/01_eda.ipynb
-/eda.ipynb

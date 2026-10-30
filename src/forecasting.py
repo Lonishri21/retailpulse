@@ -30,11 +30,8 @@ def promo_calendar(con, index) -> pd.Series:
 
 
 def lost_units(con, by_sku: bool = False) -> pd.DataFrame:
-    """Estimated units lost to known stockouts.
-
-    Each store x SKU in a stockout window is assumed to have sold its average daily units
-    from the 90 days before the window.
-    """
+    """Units lost to the flagged stockouts, assuming each store x SKU kept selling at its
+    average rate from the 90 days before the window."""
     key = "sku_id, " if by_sku else ""
     df = con.sql(f"""
         WITH pairs AS (
@@ -55,7 +52,6 @@ def lost_units(con, by_sku: bool = False) -> pd.DataFrame:
     return df
 
 
-# --------------------------------------------------------------------------- daily models
 def rolling_origin(forecast_fn, y: pd.Series, start, weeks: int = 8) -> pd.Series:
     """Forecast 7 days from each weekly origin, using only data before the origin."""
     parts = []
@@ -76,7 +72,7 @@ def last_year_with_growth(history: pd.Series, days) -> pd.Series:
 
 def prophet_model(history: pd.Series, regressors: pd.DataFrame, interval_width: float = 0.8,
                   changepoint_prior_scale: float = 0.05, seasonality_prior_scale: float = 10.0):
-    """Fit Prophet (multiplicative yearly + weekly seasonality) with the given regressors."""
+    """Prophet with multiplicative yearly + weekly seasonality."""
     from prophet import Prophet
     m = Prophet(yearly_seasonality=10, weekly_seasonality=True, daily_seasonality=False,
                 seasonality_mode="multiplicative", interval_width=interval_width,
@@ -88,18 +84,14 @@ def prophet_model(history: pd.Series, regressors: pd.DataFrame, interval_width: 
 
 
 def prophet_predict(model, days, regressors: pd.DataFrame) -> pd.DataFrame:
-    np.random.seed(42)   # Prophet samples its uncertainty interval at random
+    np.random.seed(42)   # the interval is sampled, so seed it
     fut = pd.DataFrame({"ds": days}).join(regressors, on="ds")
     return model.predict(fut).set_index("ds")[["yhat", "yhat_lower", "yhat_upper"]]
 
 
-# --------------------------------------------------------------------------- LSTM
 def lstm_inputs(origin, y: pd.Series, extra: pd.DataFrame):
-    """Inputs for one forecast origin, scaled by the recent level.
-
-    history: last H days of (units / level, discount)
-    future:  next F days of (same day last year, relative to last year's level), calendar, discount
-    """
+    """History: last H days of units/level and discount.
+    Future: next F days of last year's units (relative to last year's level), calendar and discount."""
     hist = y.loc[origin - pd.Timedelta(days=H): origin - pd.Timedelta(days=1)]
     level = hist.iloc[-28:].mean()
     level_ly = y.loc[origin - pd.Timedelta(days=364 + 28): origin - pd.Timedelta(days=365)].mean()
@@ -124,7 +116,7 @@ def lstm_dataset(origins, y: pd.Series, extra: pd.DataFrame, with_target: bool =
 
 
 def train_lstm(y: pd.Series, extra: pd.DataFrame, last_origin, seed: int = 42):
-    """Train on every daily origin whose 7 target days end before `last_origin` + 7."""
+    """Train on every daily origin up to `last_origin`."""
     import tensorflow as tf
     tf.keras.utils.set_random_seed(seed)
     tf.config.experimental.enable_op_determinism()
@@ -142,7 +134,7 @@ def train_lstm(y: pd.Series, extra: pd.DataFrame, last_origin, seed: int = 42):
 
 
 def save_keras(model, path) -> None:
-    """Save a Keras model with fixed file timestamps, so an unchanged model gives an identical file."""
+    """Save with fixed zip timestamps so the file only changes when the model does."""
     import zipfile
     model.save(path)
     with zipfile.ZipFile(path) as z:

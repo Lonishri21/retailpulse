@@ -1,4 +1,4 @@
-"""Smoke tests: every dashboard page runs without an error on the committed data."""
+"""Every dashboard page should load without errors."""
 from pathlib import Path
 
 import pytest

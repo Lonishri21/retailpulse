@@ -15,7 +15,7 @@ DIMENSIONS = {
 
 
 def build_clean_sales(source: Path, out_path: Path, con: duckdb.DuckDBPyConnection) -> dict:
-    """Remove exact duplicates and quantity <= 0, save as parquet, return row counts."""
+    """Drop exact duplicates and rows with quantity <= 0, write parquet, return row counts."""
     con.execute("SET enable_progress_bar = false")
     source, out_path = Path(source), Path(out_path)
     reader = "read_parquet" if source.suffix == ".parquet" else "read_csv_auto"
@@ -38,7 +38,7 @@ def connect(data_dir: Path, sales_parquet: Path) -> duckdb.DuckDBPyConnection:
     """Open DuckDB with a view for each table."""
     con = duckdb.connect()
     con.execute("SET enable_progress_bar = false")
-    # single thread = reproducible sums
+    # one thread so sums come out the same on every run
     con.execute("SET threads = 1")
     con.sql(f"CREATE VIEW sales AS SELECT * FROM read_parquet('{Path(sales_parquet).as_posix()}')")
     for view, file in DIMENSIONS.items():

@@ -1,5 +1,7 @@
 # Dataset
 
+[Synthetic Retail Dataset - 10 Million Transactions](https://www.kaggle.com/datasets/mrayyanshehzad/synthetic-retail-dataset-10-million-transactions) by mrayyanshehzad on Kaggle.
+
 Synthetic multi-store retail data: 30 stores, 5,000 SKUs, 10,000 customers, sales from 2022 to 2025 (prices in PKR). 100% synthetic.
 
 ## Files
@@ -112,4 +114,4 @@ sku_master.sku_id  ──▶ sku_inventory_flags.csv
 
 ## License
 
-Apache License 2.0.
+Apache License 2.0 (from the dataset's original README).

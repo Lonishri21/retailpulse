@@ -1,7 +1,4 @@
-"""Shared helpers for the RetailPulse dashboard: cached loaders and number formatting.
-
-The app only reads files saved by the notebooks; nothing is trained here.
-"""
+"""Shared loaders and formatting for the dashboard pages."""
 import sys
 from pathlib import Path
 
@@ -20,13 +17,13 @@ RISK_COLORS = {"Low": "#4C9F70", "Medium": "#E0A030", "High": "#C8553D"}
 
 @st.cache_data
 def load_csv(name: str, **kwargs) -> pd.DataFrame:
-    """A table from data/processed/."""
+    """Read a CSV from data/processed."""
     return pd.read_csv(DATA / name, **kwargs)
 
 
 @st.cache_data
 def load_master(name: str) -> pd.DataFrame:
-    """A master table from retail_clean_dataset/ (stores, SKUs, customers)."""
+    """Read a master table (stores, SKUs, customers)."""
     return pd.read_csv(RAW / f"{name}.csv")
 
 

@@ -1,4 +1,4 @@
-"""RetailPulse dashboard: home page. Run from the project root: streamlit run app/Home.py"""
+"""Run with: streamlit run app/Home.py"""
 import sys
 from pathlib import Path
 

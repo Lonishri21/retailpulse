@@ -15,7 +15,7 @@ rec = load_csv("inventory_recommendations.csv")
 level = st.sidebar.slider("Service level (chance of not running out in a week)", 0.80, 0.99, 0.95, 0.01)
 abc = st.sidebar.multiselect("ABC class (within top 20)", ["A", "B", "C"], default=["A", "B", "C"])
 
-# Recomputed live from the saved forecast and error: nothing is retrained
+# just re-applying the formulas, nothing is retrained
 z = norm.ppf(level)
 r = rec[rec["abc_top20"].isin(abc)].copy()
 r["safety_stock"] = z * r["sigma"]

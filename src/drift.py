@@ -5,7 +5,7 @@ from scipy.stats import ks_2samp
 
 
 def psi(expected, actual, bins: int = 10) -> float:
-    """PSI of `actual` vs `expected`, using quantile bins of `expected`. <0.1 stable, 0.1-0.25 moderate, >0.25 significant."""
+    """PSI with quantile bins taken from `expected`."""
     expected, actual = np.asarray(expected, float), np.asarray(actual, float)
     edges = np.unique(np.quantile(expected, np.linspace(0, 1, bins + 1)))
     edges[0], edges[-1] = -np.inf, np.inf
@@ -20,7 +20,7 @@ def drift_status(value: float) -> str:
 
 
 def drift_report(ref: pd.DataFrame, cur: pd.DataFrame, columns) -> pd.DataFrame:
-    """One row per feature: PSI, KS statistic and p-value, mean change and status."""
+    """PSI, KS test and mean change for each column."""
     rows = []
     for c in columns:
         r, k = ref[c].dropna(), cur[c].dropna()

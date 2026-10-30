@@ -6,7 +6,7 @@ Zidio internship project: customer segmentation, churn prediction, demand foreca
 
 **Live dashboard:** https://retailpulsegit-fyq3ydw2nxktrp7xckcmjd.streamlit.app/
 
-Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sales lines (2022–2025, PKR). See [docs/DATASET.md](docs/DATASET.md).
+Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sales lines (2022–2025, PKR). Source: [Kaggle](https://www.kaggle.com/datasets/mrayyanshehzad/synthetic-retail-dataset-10-million-transactions). See [docs/DATASET.md](docs/DATASET.md).
 
 ## Progress
 
@@ -71,7 +71,7 @@ Python 3.11 is recommended (Prophet and TensorFlow are most reliable on it).
 
 The two `sales_transactions.csv` files (~770 MB each) are **not stored in git** because GitHub limits files to 100 MB. All other CSVs are included.
 
-1. Download the dataset from: **<add dataset download link here>**
+1. Download [Synthetic Retail Dataset - 10 Million Transactions](https://www.kaggle.com/datasets/mrayyanshehzad/synthetic-retail-dataset-10-million-transactions) from Kaggle
 2. Put the large files at:
    - `retail_clean_dataset/sales_transactions.csv`
    - `retail_contaminated_dataset/sales_transactions.csv`

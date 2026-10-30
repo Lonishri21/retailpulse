@@ -1,4 +1,4 @@
-"""Unit tests for the reusable code in src/."""
+"""Tests for src/."""
 import duckdb
 import numpy as np
 import pandas as pd

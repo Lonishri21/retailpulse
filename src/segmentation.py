@@ -43,7 +43,7 @@ def rfm_segment(r: int, f: int, m: int) -> str:
 
 def make_kmeans(k: int, random_state: int = 42):
     """log1p -> standardise -> K-Means pipeline."""
-    from sklearn.cluster import KMeans          # imported here so the dashboard can use this module without scikit-learn
+    from sklearn.cluster import KMeans  # imported here because the dashboard doesn't install sklearn
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import FunctionTransformer, StandardScaler
     return make_pipeline(

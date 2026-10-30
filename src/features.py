@@ -221,7 +221,7 @@ def sku_weekly(con, top_n: int = 20) -> pd.DataFrame:
 
 
 def inventory_features(con, snapshot) -> pd.DataFrame:
-    """Stock ratios and sales velocity per store x SKU. `label_*` columns are for evaluation only."""
+    """Stock ratios and sales velocity per store x SKU. label_* columns come from the answer key - don't train on them."""
     S = f"DATE '{_date(snapshot)}'"
     f = con.sql(f"""
         WITH vel AS (

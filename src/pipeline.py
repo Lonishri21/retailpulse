@@ -1,7 +1,4 @@
-"""Run the RetailPulse steps in order: clean + features -> segment -> churn -> forecast -> inventory -> MLOps/drift.
-
-Each step is its notebook, executed top to bottom (outputs are saved back into the notebook).
-If a step fails, the pipeline stops so later steps never run on stale inputs.
+"""Runs notebooks 02-07 in order and stops at the first failure.
 
     python -m src.pipeline              # run every step
     python -m src.pipeline --from churn # start at a later step
@@ -49,7 +46,7 @@ def main(argv=None) -> int:
         print(f"-> {name}: {what} ...", flush=True)
         try:
             run_notebook(ROOT / "notebooks" / nb)
-        except Exception as e:  # stop the pipeline on the first failure
+        except Exception as e:
             print(f"FAILED at step '{name}' ({nb}): {type(e).__name__}: {str(e)[:500]}")
             return 1
         print(f"   done in {time.time() - t:.0f}s")

@@ -1,11 +1,12 @@
-# RetailPulse dashboard. Build: docker build -t retailpulse .   Run: docker run -p 8501:8501 retailpulse
+# docker build -t retailpulse .
+# docker run -p 8501:8501 retailpulse
 FROM python:3.11-slim
 
 WORKDIR /app
 COPY app/requirements.txt app/requirements.txt
 RUN pip install --no-cache-dir -r app/requirements.txt
 
-# Only what the dashboard reads (large raw files and caches are excluded in .dockerignore)
+# only the files the app reads
 COPY app/ app/
 COPY src/__init__.py src/segmentation.py src/
 COPY data/processed/ data/processed/
