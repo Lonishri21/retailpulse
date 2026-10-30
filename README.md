@@ -16,13 +16,14 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 | 5. Demand forecasting (Prophet, LSTM, hybrid) | ✅ Done | [`notebooks/05_forecasting.ipynb`](notebooks/05_forecasting.ipynb), `data/processed/forecast_*.csv`, `sku_forecasts.csv`, models in `models/` |
 | 6. Inventory optimisation | ✅ Done | [`notebooks/06_inventory.ipynb`](notebooks/06_inventory.ipynb), `data/processed/inventory_recommendations.csv`, `inventory_simulation.csv` |
 | 7. MLOps — MLflow, Optuna, drift detection | ✅ Done | [`notebooks/07_mlops_drift.ipynb`](notebooks/07_mlops_drift.ipynb), `data/processed/drift_report.csv`, `mlflow_runs.csv`, `src/pipeline.py` |
-| 8. Streamlit dashboard | ⏳ Next | |
+| 8. Streamlit dashboard | ✅ Done | [`app/`](app/) — 7 pages: overview, sales, customers, churn, forecast, inventory, monitoring |
 | 9–12. API, Power BI, Docker/CI/deployment, final report | ⏳ | |
 
 ## Project structure
 
 ```
 ├── notebooks/               # one notebook per step: 01_eda, 02_feature_engineering, ...
+├── app/                     # Streamlit dashboard (Home.py + pages/), reads saved outputs only
 ├── src/                     # reusable code used by notebooks, tests and the app
 │   ├── cleaning.py          #   load + clean sales (DuckDB)
 │   ├── features.py          #   customer, daily, weekly, SKU and inventory features
@@ -76,6 +77,13 @@ The two `sales_transactions.csv` files (~770 MB each) are **not stored in git** 
    Or run steps 2–7 in one go: `python -m src.pipeline`.
 
 The Parquet files are rebuilt automatically and are git-ignored.
+
+## Dashboard
+
+```bash
+streamlit run app/Home.py
+```
+The app only reads files in `data/processed/`, `reports/figures/` and the small dataset CSVs, so it runs without the large sales files. It has its own light `app/requirements.txt`.
 
 ## Experiment tracking
 

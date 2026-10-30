@@ -1,9 +1,6 @@
 """RFM scores and K-Means customer segments."""
 import numpy as np
 import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import FunctionTransformer, StandardScaler
 
 KMEANS_FEATURES = ["recency_days", "frequency", "monetary"]
 
@@ -46,6 +43,9 @@ def rfm_segment(r: int, f: int, m: int) -> str:
 
 def make_kmeans(k: int, random_state: int = 42):
     """log1p -> standardise -> K-Means pipeline."""
+    from sklearn.cluster import KMeans          # imported here so the dashboard can use this module without scikit-learn
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import FunctionTransformer, StandardScaler
     return make_pipeline(
         FunctionTransformer(np.log1p),
         StandardScaler(),
