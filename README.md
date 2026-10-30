@@ -4,6 +4,8 @@
 
 Zidio internship project: customer segmentation, churn prediction, demand forecasting and inventory optimisation for a multi-store retail chain.
 
+**Live dashboard:** https://retailpulsegit-fyq3ydw2nxktrp7xckcmjd.streamlit.app/
+
 Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sales lines (2022–2025, PKR). See [docs/DATASET.md](docs/DATASET.md).
 
 ## Progress
@@ -21,7 +23,7 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 | 8. Streamlit dashboard | ✅ Done | [`app/`](app/) — 7 pages: overview, sales, customers, churn, forecast, inventory, monitoring |
 | 9. FastAPI | ➖ Skipped | |
 | 10. Power BI report | ➖ Skipped | |
-| 11. Docker, CI, deployment | 🔄 In progress | `Dockerfile`, `.github/workflows/ci.yml`, `tests/`; live link: see [Deployment](#deployment) |
+| 11. Docker, CI, deployment | ✅ Done | `Dockerfile`, `.github/workflows/ci.yml`, `tests/`; [live dashboard](https://retailpulsegit-fyq3ydw2nxktrp7xckcmjd.streamlit.app/) |
 | 12. Final report | ⏳ Next | |
 
 ## Project structure
@@ -95,7 +97,7 @@ The app only reads files in `data/processed/`, `reports/figures/` and the small 
 
 ## Deployment
 
-**Live dashboard:** _link added after deploying on Streamlit Community Cloud_
+**Live dashboard:** https://retailpulsegit-fyq3ydw2nxktrp7xckcmjd.streamlit.app/
 
 **Docker** (only the dashboard and the small files it reads go into the image):
 ```bash
