@@ -14,8 +14,8 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 | 3. Customer segmentation (RFM + K-Means) | ✅ Done | [`notebooks/03_segmentation.ipynb`](notebooks/03_segmentation.ipynb), `data/processed/customer_segments.csv`, `models/kmeans_segments.pkl` |
 | 4. Churn prediction (time-split, no leakage) | ✅ Done | [`notebooks/04_churn.ipynb`](notebooks/04_churn.ipynb), `data/processed/customer_churn.csv`, `models/churn_xgb.pkl` |
 | 5. Demand forecasting (Prophet, LSTM, hybrid) | ✅ Done | [`notebooks/05_forecasting.ipynb`](notebooks/05_forecasting.ipynb), `data/processed/forecast_*.csv`, `sku_forecasts.csv`, models in `models/` |
-| 6. Inventory optimisation | ⏳ Next | |
-| 7. MLOps — MLflow, Optuna, drift detection | ⏳ | |
+| 6. Inventory optimisation | ✅ Done | [`notebooks/06_inventory.ipynb`](notebooks/06_inventory.ipynb), `data/processed/inventory_recommendations.csv`, `inventory_simulation.csv` |
+| 7. MLOps — MLflow, Optuna, drift detection | ⏳ Next | |
 | 8. Streamlit dashboard | ⏳ | |
 | 9–12. API, Power BI, Docker/CI/deployment, final report | ⏳ | |
 
@@ -29,6 +29,7 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 │   ├── segmentation.py      #   RFM scores, K-Means pipeline, segment names and actions
 │   ├── churn.py             #   churn dataset: features before a cutoff, label after it
 │   ├── forecasting.py       #   lost-sales estimate, baselines, Prophet, LSTM
+│   ├── inventory.py         #   safety stock, reorder point, EOQ, ABC, stock simulation
 │   └── metrics.py           #   forecast accuracy metrics (WAPE, MAPE, MAE, RMSE)
 ├── data/
 │   ├── processed/           # feature tables produced by the notebooks
@@ -66,5 +67,6 @@ The two `sales_transactions.csv` files (~770 MB each) are **not stored in git** 
    - `notebooks/03_segmentation.ipynb` — customer segments and the K-Means model
    - `notebooks/04_churn.ipynb` — churn model and today's risk scores (~3 min)
    - `notebooks/05_forecasting.ipynb` — forecast comparison, 30-day and SKU forecasts (~5 min)
+   - `notebooks/06_inventory.ipynb` — inventory recommendations and simulation
 
 The Parquet files are rebuilt automatically and are git-ignored.
