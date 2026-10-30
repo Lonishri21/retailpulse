@@ -1,0 +1,17 @@
+{
+  "target": "daily units (estimated demand = recorded + lost to stockouts)",
+  "hybrid_weight_prophet": 0.9,
+  "range_80_relative": [
+    -0.0209,
+    0.0442
+  ],
+  "prophet_regressors": [
+    "m1",
+    "m2",
+    "m11",
+    "m12",
+    "disc"
+  ],
+  "sku_model": "Prophet",
+  "trained_through": "2025-12-31"
+}

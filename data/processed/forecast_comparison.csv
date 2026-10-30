@@ -1,0 +1,6 @@
+model,val weekly WAPE %,test daily WAPE %,test weekly WAPE %,test weekly MAPE %,test weekly RMSE,test weekly WAPE % vs est. demand
+Naive last week,2.0801,4.4648,3.3793,3.3708,6674.5091,6.4998
+Last year x growth,1.5747,2.7486,2.2011,2.1813,3047.8418,4.1282
+Prophet,1.2332,2.7813,2.4202,2.4766,3324.5069,2.7359
+LSTM,1.1952,2.8115,2.4679,2.4775,3675.2795,3.9642
+Hybrid,1.2048,2.7264,2.4183,2.4702,3285.3650,2.8587

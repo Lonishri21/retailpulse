@@ -13,8 +13,8 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 | 2. Feature engineering | ✅ Done | [`notebooks/02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb), tables in `data/processed/`, figures `reports/figures/02*.png` |
 | 3. Customer segmentation (RFM + K-Means) | ✅ Done | [`notebooks/03_segmentation.ipynb`](notebooks/03_segmentation.ipynb), `data/processed/customer_segments.csv`, `models/kmeans_segments.pkl` |
 | 4. Churn prediction (time-split, no leakage) | ✅ Done | [`notebooks/04_churn.ipynb`](notebooks/04_churn.ipynb), `data/processed/customer_churn.csv`, `models/churn_xgb.pkl` |
-| 5. Demand forecasting (Prophet, LSTM, hybrid) | ⏳ Next | |
-| 6. Inventory optimisation | ⏳ | |
+| 5. Demand forecasting (Prophet, LSTM, hybrid) | ✅ Done | [`notebooks/05_forecasting.ipynb`](notebooks/05_forecasting.ipynb), `data/processed/forecast_*.csv`, `sku_forecasts.csv`, models in `models/` |
+| 6. Inventory optimisation | ⏳ Next | |
 | 7. MLOps — MLflow, Optuna, drift detection | ⏳ | |
 | 8. Streamlit dashboard | ⏳ | |
 | 9–12. API, Power BI, Docker/CI/deployment, final report | ⏳ | |
@@ -27,7 +27,9 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 │   ├── cleaning.py          #   load + clean sales (DuckDB)
 │   ├── features.py          #   customer, daily, weekly, SKU and inventory features
 │   ├── segmentation.py      #   RFM scores, K-Means pipeline, segment names and actions
-│   └── churn.py             #   churn dataset: features before a cutoff, label after it
+│   ├── churn.py             #   churn dataset: features before a cutoff, label after it
+│   ├── forecasting.py       #   lost-sales estimate, baselines, Prophet, LSTM
+│   └── metrics.py           #   forecast accuracy metrics (WAPE, MAPE, MAE, RMSE)
 ├── data/
 │   ├── processed/           # feature tables produced by the notebooks
 │   └── cache/               # Parquet copies of the sales CSVs (git-ignored, rebuilt automatically)
@@ -36,7 +38,7 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 ├── retail_clean_dataset/        # main dataset (small CSVs in git, see "Data setup")
 ├── retail_contaminated_dataset/ # second version of the dataset (used for comparison)
 ├── docs/DATASET.md          # dataset documentation
-├── models/                  # saved models (kmeans_segments.pkl, churn_xgb.pkl)
+├── models/                  # saved models (segments, churn, Prophet, LSTM)
 ├── requirements.txt         # dependencies
 └── requirements-lock.txt    # exact versions
 ```
@@ -63,5 +65,6 @@ The two `sales_transactions.csv` files (~770 MB each) are **not stored in git** 
    - `notebooks/02_feature_engineering.ipynb` — builds `data/processed/sales_clean.parquet` and the feature tables
    - `notebooks/03_segmentation.ipynb` — customer segments and the K-Means model
    - `notebooks/04_churn.ipynb` — churn model and today's risk scores (~3 min)
+   - `notebooks/05_forecasting.ipynb` — forecast comparison, 30-day and SKU forecasts (~5 min)
 
 The Parquet files are rebuilt automatically and are git-ignored.
