@@ -29,8 +29,10 @@ left, right = st.columns(2)
 fig = px.bar(drift.sort_values("PSI"), x="PSI", y="feature", color="status", orientation="h", facet_row="group",
              color_discrete_map={"Stable": "#4C9F70", "Moderate": "#E0A030", "Significant": "#C8553D"},
              title="Drift by feature, 2025 vs 2024 (PSI)")
-fig.add_vline(x=0.1, line_dash="dot", line_color="grey"); fig.add_vline(x=0.25, line_dash="dash", line_color="grey")
-fig.update_yaxes(matches=None, title=""); fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig.add_vline(x=0.1, line_dash="dot", line_color="grey")
+fig.add_vline(x=0.25, line_dash="dash", line_color="grey")
+fig.update_yaxes(matches=None, title="")
+fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 fig.update_layout(height=520, legend_title="")
 left.plotly_chart(fig, width="stretch")
 
@@ -44,8 +46,9 @@ st.markdown("""
 **Reading the drift:** daily sales features drift mainly because the business **grew** (~5% more units) and ran **far fewer store-wide promotions** in 2025
 (revenue +12.5%). Customer behaviour (visit frequency, basket size, recency) is stable. The models are not broken, but they need **regular retraining**.
 
-**Retraining rule:** retrain forecasts if the rolling 4-week WAPE rises 5 points above the test WAPE, or a key sales feature has PSI > 0.25;
-re-score churn monthly; recalculate safety stocks whenever forecasts are retrained.
+**Retraining rule:** retrain forecasts if the rolling 4-week WAPE rises 5 points above the test WAPE, or a key sales feature has PSI > 0.25
+re-score churn monthly
+recalculate safety stocks whenever forecasts are retrained.
 """)
 
 with st.expander("Drift report (all features)"):

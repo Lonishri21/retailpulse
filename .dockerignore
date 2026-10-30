@@ -1,0 +1,15 @@
+.git
+.venv
+.ruff_cache
+.pytest_cache
+**/__pycache__
+.ipynb_checkpoints
+notebooks
+mlruns
+mlflow.db
+data/cache
+data/raw
+data/processed/*.parquet
+retail_contaminated_dataset
+retail_clean_dataset/sales_transactions.csv
+models

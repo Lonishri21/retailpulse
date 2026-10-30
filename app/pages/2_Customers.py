@@ -40,7 +40,8 @@ fig = px.scatter(s.sample(min(len(s), 4000), random_state=42), x="frequency", y=
                  color_discrete_map=SEGMENT_COLORS, category_orders={"Segment": SEGMENTS}, opacity=.6,
                  hover_data=["customer_id", "recency_days", "loyalty_segment"],
                  title="Visits vs spend per customer, 2022–2025 (baskets, PKR)")
-fig.update_traces(marker_size=4); fig.update_layout(xaxis_title="baskets", yaxis_title="PKR", legend_title="")
+fig.update_traces(marker_size=4)
+fig.update_layout(xaxis_title="baskets", yaxis_title="PKR", legend_title="")
 right.plotly_chart(fig, width="stretch")
 
 st.subheader("Segment profiles and actions")
@@ -60,7 +61,9 @@ if cid:
     else:
         r = row.iloc[0]
         a, b, c, d = st.columns(4)
-        a.metric("Segment", r["Segment"]); b.metric("Loyalty tier", r["loyalty_segment"])
-        c.metric("Churn risk (next quarter)", f"{r['churn_prob']:.0%} ({r['risk_band']})"); d.metric("Spend 2022–2025", pkr(r["monetary"]))
+        a.metric("Segment", r["Segment"])
+        b.metric("Loyalty tier", r["loyalty_segment"])
+        c.metric("Churn risk (next quarter)", f"{r['churn_prob']:.0%} ({r['risk_band']})")
+        d.metric("Spend 2022–2025", pkr(r["monetary"]))
         st.write(f"**Recommended action:** {SEGMENT_ACTIONS[r['Segment']][1]}")
         st.dataframe(row.drop(columns=["Cluster"]), width="stretch", hide_index=True)

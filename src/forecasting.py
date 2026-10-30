@@ -114,7 +114,9 @@ def lstm_dataset(origins, y: pd.Series, extra: pd.DataFrame, with_target: bool =
     xh, xf, lv, tg = [], [], [], []
     for o in origins:
         a, b, level = lstm_inputs(o, y, extra)
-        xh.append(a); xf.append(b); lv.append(level)
+        xh.append(a)
+        xf.append(b)
+        lv.append(level)
         if with_target:
             tg.append(y.reindex(pd.date_range(o, periods=F)).to_numpy() / level)
     out = [np.array(xh, "float32"), np.array(xf, "float32"), np.array(lv)]

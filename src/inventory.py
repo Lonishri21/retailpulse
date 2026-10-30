@@ -44,7 +44,8 @@ def simulate(demand, rop, q, start, lead_weeks=1):
         position = stock + sum(pipeline)
         order = np.ceil((rop[t] - position) / q[t] + 1e-9) * q[t] if position <= rop[t] else 0.0
         pipeline.append(order)
-        levels.append(stock); orders.append(order)
+        levels.append(stock)
+        orders.append(order)
     return {"fill_rate_%": 100 * sold_total / max(demand.sum(), 1), "stockout_weeks": int(short_weeks),
             "avg_inventory": float(np.mean(levels)), "orders": int(np.count_nonzero(orders)),
             "levels": np.array(levels), "order_qty": np.array(orders)}
@@ -62,7 +63,8 @@ def simulate_naive(demand, start, lead_weeks=1):
         short_weeks += d > stock
         stock -= sold
         pipeline.append(sold)
-        levels.append(stock); orders.append(sold)
+        levels.append(stock)
+        orders.append(sold)
     return {"fill_rate_%": 100 * sold_total / max(demand.sum(), 1), "stockout_weeks": int(short_weeks),
             "avg_inventory": float(np.mean(levels)), "orders": int(np.count_nonzero(orders)),
             "levels": np.array(levels), "order_qty": np.array(orders)}

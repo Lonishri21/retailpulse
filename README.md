@@ -1,5 +1,7 @@
 # RetailPulse — AI-Powered Customer Analytics & Demand Forecasting
 
+[![CI](https://github.com/Lonishri21/retailpulse/actions/workflows/ci.yml/badge.svg)](https://github.com/Lonishri21/retailpulse/actions/workflows/ci.yml)
+
 Zidio internship project: customer segmentation, churn prediction, demand forecasting and inventory optimisation for a multi-store retail chain.
 
 Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sales lines (2022–2025, PKR). See [docs/DATASET.md](docs/DATASET.md).
@@ -17,7 +19,10 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 | 6. Inventory optimisation | ✅ Done | [`notebooks/06_inventory.ipynb`](notebooks/06_inventory.ipynb), `data/processed/inventory_recommendations.csv`, `inventory_simulation.csv` |
 | 7. MLOps — MLflow, Optuna, drift detection | ✅ Done | [`notebooks/07_mlops_drift.ipynb`](notebooks/07_mlops_drift.ipynb), `data/processed/drift_report.csv`, `mlflow_runs.csv`, `src/pipeline.py` |
 | 8. Streamlit dashboard | ✅ Done | [`app/`](app/) — 7 pages: overview, sales, customers, churn, forecast, inventory, monitoring |
-| 9–12. API, Power BI, Docker/CI/deployment, final report | ⏳ | |
+| 9. FastAPI | ➖ Skipped | |
+| 10. Power BI report | ➖ Skipped | |
+| 11. Docker, CI, deployment | 🔄 In progress | `Dockerfile`, `.github/workflows/ci.yml`, `tests/`; live link: see [Deployment](#deployment) |
+| 12. Final report | ⏳ Next | |
 
 ## Project structure
 
@@ -44,6 +49,9 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 ├── retail_contaminated_dataset/ # second version of the dataset (used for comparison)
 ├── docs/DATASET.md          # dataset documentation
 ├── models/                  # saved models (segments, churn, Prophet, LSTM)
+├── tests/                   # unit tests (src) + smoke tests (every dashboard page)
+├── .github/workflows/ci.yml # lint + tests + Docker build on every push
+├── Dockerfile               # dashboard container
 ├── requirements.txt         # dependencies
 └── requirements-lock.txt    # exact versions
 ```
@@ -84,6 +92,23 @@ The Parquet files are rebuilt automatically and are git-ignored.
 streamlit run app/Home.py
 ```
 The app only reads files in `data/processed/`, `reports/figures/` and the small dataset CSVs, so it runs without the large sales files. It has its own light `app/requirements.txt`.
+
+## Deployment
+
+**Live dashboard:** _link added after deploying on Streamlit Community Cloud_
+
+**Docker** (only the dashboard and the small files it reads go into the image):
+```bash
+docker build -t retailpulse .
+docker run -p 8501:8501 retailpulse
+```
+then open http://localhost:8501.
+
+**Continuous integration:** every push runs `ruff` and `pytest` (unit tests for `src/` and a smoke test of every dashboard page), then builds the Docker image and checks the container's health endpoint.
+
+**Streamlit Community Cloud:** at share.streamlit.io, sign in with GitHub → *Create app* → repo `Lonishri21/retailpulse`, branch `main`, main file `app/Home.py` → *Advanced settings*: Python 3.11 → *Deploy*. Cloud installs the light `app/requirements.txt` next to the main file.
+
+**Future work:** Kubernetes (2 replicas behind a Service, using the same health check as a liveness probe) and an Airflow DAG for the pipeline.
 
 ## Experiment tracking
 
