@@ -74,11 +74,13 @@ def last_year_with_growth(history: pd.Series, days) -> pd.Series:
     return pd.Series(history.reindex(days - pd.Timedelta(days=364)).to_numpy() * growth, index=days)
 
 
-def prophet_model(history: pd.Series, regressors: pd.DataFrame, interval_width: float = 0.8):
+def prophet_model(history: pd.Series, regressors: pd.DataFrame, interval_width: float = 0.8,
+                  changepoint_prior_scale: float = 0.05, seasonality_prior_scale: float = 10.0):
     """Fit Prophet (multiplicative yearly + weekly seasonality) with the given regressors."""
     from prophet import Prophet
     m = Prophet(yearly_seasonality=10, weekly_seasonality=True, daily_seasonality=False,
-                seasonality_mode="multiplicative", interval_width=interval_width)
+                seasonality_mode="multiplicative", interval_width=interval_width,
+                changepoint_prior_scale=changepoint_prior_scale, seasonality_prior_scale=seasonality_prior_scale)
     for col in regressors.columns:
         m.add_regressor(col)
     df = pd.DataFrame({"ds": history.index, "y": history.to_numpy()}).join(regressors, on="ds")
@@ -86,6 +88,7 @@ def prophet_model(history: pd.Series, regressors: pd.DataFrame, interval_width: 
 
 
 def prophet_predict(model, days, regressors: pd.DataFrame) -> pd.DataFrame:
+    np.random.seed(42)   # Prophet samples its uncertainty interval at random
     fut = pd.DataFrame({"ds": days}).join(regressors, on="ds")
     return model.predict(fut).set_index("ds")[["yhat", "yhat_lower", "yhat_upper"]]
 
@@ -134,6 +137,17 @@ def train_lstm(y: pd.Series, extra: pd.DataFrame, last_origin, seed: int = 42):
     model.fit([xh, xf], tg, epochs=300, batch_size=32, validation_split=0.15, verbose=0,
               callbacks=[tf.keras.callbacks.EarlyStopping(patience=25, restore_best_weights=True)])
     return model
+
+
+def save_keras(model, path) -> None:
+    """Save a Keras model with fixed file timestamps, so an unchanged model gives an identical file."""
+    import zipfile
+    model.save(path)
+    with zipfile.ZipFile(path) as z:
+        items = [(i.filename, z.read(i.filename)) for i in z.infolist()]
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+        for name, data in items:
+            z.writestr(zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0)), data)
 
 
 def lstm_forecast(model, y: pd.Series, extra: pd.DataFrame, origins) -> pd.Series:

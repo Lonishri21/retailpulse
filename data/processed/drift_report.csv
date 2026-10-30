@@ -1,0 +1,19 @@
+group,feature,PSI,status,KS_stat,KS_p,ref_mean,cur_mean,mean_change_%
+daily sales,store_wide_discount,1.9982,Significant,0.2758,0.0000,11.2189,2.1847,-80.5269
+daily sales,revenue,1.6266,Significant,0.3085,0.0000,7329978.1374,8248992.6233,12.5378
+daily sales,lines,1.5849,Significant,0.2556,0.0000,7009.1366,7328.2137,4.5523
+daily sales,aov,0.8820,Significant,0.2512,0.0000,1997.4710,2152.3116,7.7518
+daily sales,units,0.7546,Significant,0.2611,0.0000,13185.8880,13781.7178,4.5187
+daily sales,receipts,0.7453,Significant,0.2665,0.0000,3635.8743,3821.3041,5.1000
+daily sales,customers,0.7217,Significant,0.2529,0.0000,2952.3415,3072.5726,4.0724
+customer features,promo_line_share,2.8675,Significant,0.6384,0.0000,0.2503,0.2095,-16.3099
+customer features,discount_share,0.8474,Significant,0.3685,0.0000,0.0731,0.0634,-13.3260
+customer features,avg_days_between,0.1746,Moderate,0.0696,0.0000,3.3724,3.2841,-2.6181
+customer features,spend_365,0.1296,Moderate,0.1197,0.0000,267802.2064,301088.2307,12.4293
+customer features,aov,0.0653,Stable,0.0877,0.0000,2087.2413,2106.9577,0.9446
+customer features,items_per_basket,0.0380,Stable,0.0561,0.0000,1.9272,1.9248,-0.1251
+customer features,spend_trend_90,0.0259,Stable,0.0645,0.0000,0.4159,0.3189,-23.3214
+customer features,overdue_ratio,0.0079,Stable,0.0317,0.0001,0.9032,0.8950,-0.9083
+customer features,visits_90,0.0075,Stable,0.0365,0.0000,39.2213,40.7036,3.7793
+customer features,spend_90,0.0043,Stable,0.0249,0.0041,86992.7838,89236.9932,2.5798
+customer features,recency_days,0.0009,Stable,0.0124,0.4255,2.9433,2.8498,-3.1767

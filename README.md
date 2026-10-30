@@ -15,8 +15,8 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 | 4. Churn prediction (time-split, no leakage) | ✅ Done | [`notebooks/04_churn.ipynb`](notebooks/04_churn.ipynb), `data/processed/customer_churn.csv`, `models/churn_xgb.pkl` |
 | 5. Demand forecasting (Prophet, LSTM, hybrid) | ✅ Done | [`notebooks/05_forecasting.ipynb`](notebooks/05_forecasting.ipynb), `data/processed/forecast_*.csv`, `sku_forecasts.csv`, models in `models/` |
 | 6. Inventory optimisation | ✅ Done | [`notebooks/06_inventory.ipynb`](notebooks/06_inventory.ipynb), `data/processed/inventory_recommendations.csv`, `inventory_simulation.csv` |
-| 7. MLOps — MLflow, Optuna, drift detection | ⏳ Next | |
-| 8. Streamlit dashboard | ⏳ | |
+| 7. MLOps — MLflow, Optuna, drift detection | ✅ Done | [`notebooks/07_mlops_drift.ipynb`](notebooks/07_mlops_drift.ipynb), `data/processed/drift_report.csv`, `mlflow_runs.csv`, `src/pipeline.py` |
+| 8. Streamlit dashboard | ⏳ Next | |
 | 9–12. API, Power BI, Docker/CI/deployment, final report | ⏳ | |
 
 ## Project structure
@@ -30,6 +30,9 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 │   ├── churn.py             #   churn dataset: features before a cutoff, label after it
 │   ├── forecasting.py       #   lost-sales estimate, baselines, Prophet, LSTM
 │   ├── inventory.py         #   safety stock, reorder point, EOQ, ABC, stock simulation
+│   ├── drift.py             #   PSI + KS drift report
+│   ├── tracking.py          #   MLflow setup (local SQLite store)
+│   ├── pipeline.py          #   runs all steps in order: python -m src.pipeline
 │   └── metrics.py           #   forecast accuracy metrics (WAPE, MAPE, MAE, RMSE)
 ├── data/
 │   ├── processed/           # feature tables produced by the notebooks
@@ -68,5 +71,17 @@ The two `sales_transactions.csv` files (~770 MB each) are **not stored in git** 
    - `notebooks/04_churn.ipynb` — churn model and today's risk scores (~3 min)
    - `notebooks/05_forecasting.ipynb` — forecast comparison, 30-day and SKU forecasts (~5 min)
    - `notebooks/06_inventory.ipynb` — inventory recommendations and simulation
+   - `notebooks/07_mlops_drift.ipynb` — Optuna tuning, drift report, monitoring (~10 min)
+
+   Or run steps 2–7 in one go: `python -m src.pipeline`.
 
 The Parquet files are rebuilt automatically and are git-ignored.
+
+## Experiment tracking
+
+Notebooks 04, 05 and 07 log every model run to a local MLflow store (`mlflow.db` + `mlruns/`, git-ignored). To browse runs and the registered `churn_xgb` model:
+
+```bash
+mlflow ui --backend-store-uri sqlite:///mlflow.db
+```
+then open http://127.0.0.1:5000. A copy of the run table is kept in `data/processed/mlflow_runs.csv`.
