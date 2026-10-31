@@ -62,21 +62,12 @@ def customer_features(con, snapshot) -> pd.DataFrame:
         SELECT * FROM v JOIN gaps USING (customer_id) JOIN lines USING (customer_id)
     """).df().set_index("customer_id")
 
-    # share of spend per category
-    cat = con.sql(f"""
-        SELECT customer_id, k.category, SUM(total_value) AS spend
-        FROM sales s JOIN skus k USING (sku_id)
-        WHERE s.date < {S} GROUP BY 1, 2
-    """).df().pivot(index="customer_id", columns="category", values="spend").fillna(0)
-    cat = cat.div(cat.sum(axis=1), axis=0)
-    cat.columns = ["cat_" + c.lower().replace(" & ", "_").replace(" ", "_") for c in cat.columns]
-
     demo = con.sql("""
         SELECT cust_id AS customer_id, age, gender, city, loyalty_segment, preferred_channel, registration_date
         FROM customers
     """).df().set_index("customer_id")
 
-    f = base.join(cat).join(demo)
+    f = base.join(demo)
     counts = [c for c in f.columns if c.startswith(("spend_", "visits_"))]
     f[counts] = f[counts].fillna(0)
 
@@ -154,16 +145,6 @@ def add_time_features(daily: pd.DataFrame, target: str = "units") -> pd.DataFram
     return f
 
 
-def weekly_sales(daily: pd.DataFrame) -> pd.DataFrame:
-    """Weekly Mon-Sun totals, full weeks only."""
-    cols = ["revenue", "units", "gross_profit", "receipts", "lines", "store_wide_promo", "stockout_pairs"]
-    w = daily[cols].resample("W-SUN").sum()
-    w["days"] = daily["units"].resample("W-SUN").count()
-    w = w[w["days"] == 7].drop(columns="days")
-    return w.rename(columns={"store_wide_promo": "store_wide_promo_days",
-                             "stockout_pairs": "stockout_store_sku_days"})
-
-
 def sku_weekly(con, top_n: int = 20) -> pd.DataFrame:
     """Weekly demand for the top-N SKUs by revenue."""
     w = con.sql(f"""
@@ -211,13 +192,7 @@ def sku_weekly(con, top_n: int = 20) -> pd.DataFrame:
         SELECT top.*, sku_name, category, subcategory, brand, unit_price, cost_price
         FROM top JOIN skus USING (sku_id)
     """).df()
-    out = out.merge(attrs, on="sku_id").sort_values(["revenue_rank", "week_end"]).reset_index(drop=True)
-
-    g = out.groupby("sku_id")["units"]
-    for lag in [1, 4, 52]:
-        out[f"units_lag_{lag}"] = g.shift(lag)
-    out["units_roll_mean_4"] = g.transform(lambda s: s.shift(1).rolling(4).mean())
-    return out
+    return out.merge(attrs, on="sku_id").sort_values(["revenue_rank", "week_end"]).reset_index(drop=True)
 
 
 def inventory_features(con, snapshot) -> pd.DataFrame:

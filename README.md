@@ -47,8 +47,7 @@ Data: synthetic retail chain, 30 stores, 5,000 SKUs, 10,000 customers, ~10M sale
 │   └── cache/               # Parquet copies of the sales CSVs (git-ignored, rebuilt automatically)
 ├── reports/
 │   └── figures/             # all charts, prefixed by step (01_*, 02_*, ...)
-├── retail_clean_dataset/        # main dataset (small CSVs in git, see "Data setup")
-├── retail_contaminated_dataset/ # second version of the dataset (used for comparison)
+├── retail_clean_dataset/    # dataset (small CSVs in git, see "Data setup")
 ├── docs/DATASET.md          # dataset documentation
 ├── models/                  # saved models (segments, churn, Prophet, LSTM)
 ├── tests/                   # unit tests (src) + smoke tests (every dashboard page)
@@ -69,12 +68,10 @@ Python 3.11 is recommended (Prophet and TensorFlow are most reliable on it).
 
 ## Data setup
 
-The two `sales_transactions.csv` files (~770 MB each) are **not stored in git** because GitHub limits files to 100 MB. All other CSVs are included.
+`sales_transactions.csv` (~770 MB) is **not stored in git** because GitHub limits files to 100 MB. All other CSVs are included.
 
 1. Download [Synthetic Retail Dataset - 10 Million Transactions](https://www.kaggle.com/datasets/mrayyanshehzad/synthetic-retail-dataset-10-million-transactions) from Kaggle
-2. Put the large files at:
-   - `retail_clean_dataset/sales_transactions.csv`
-   - `retail_contaminated_dataset/sales_transactions.csv`
+2. Put `sales_transactions.csv` from the `clean` folder into `retail_clean_dataset/`
 3. Run the notebooks in order:
    - `notebooks/01_eda.ipynb` — builds a Parquet cache in `data/cache/`
    - `notebooks/02_feature_engineering.ipynb` — builds `data/processed/sales_clean.parquet` and the feature tables

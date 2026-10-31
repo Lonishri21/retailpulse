@@ -6,20 +6,21 @@ Synthetic multi-store retail data: 30 stores, 5,000 SKUs, 10,000 customers, sale
 
 ## Files
 
-| File | `retail_clean_dataset/` | `retail_contaminated_dataset/` | Columns |
-|---|---|---|---|
-| `store_master.csv` | 30 | 30 | 5 |
-| `sku_master.csv` | 5,000 | 5,000 | 7 |
-| `customer_master.csv` | 10,000 | 10,000 | 7 |
-| `promotions.csv` | 100 | 100 | 8 |
-| `inventory_snapshot.csv` | 21,228 | 26,408 | 6 |
-| `sales_transactions.csv` | 9,972,038 | 9,945,511 | 11 |
-| `sku_inventory_flags.csv` | 600 | 600 | 6 |
+The project uses the dataset's `clean` folder, stored here as `retail_clean_dataset/`.
 
-- `retail_clean_dataset/` is the main dataset; the other folder is used only for comparison in the EDA.
-- Both folders contain injected stockouts (with the matching sales removed) and slow movers. Each folder's `sku_inventory_flags.csv` is its answer key: 200 `STOCKOUT_RISK` and 400 `SLOW_MOVER` rows.
+| File | Rows | Columns |
+|---|---|---|
+| `store_master.csv` | 30 | 5 |
+| `sku_master.csv` | 5,000 | 7 |
+| `customer_master.csv` | 10,000 | 7 |
+| `promotions.csv` | 100 | 8 |
+| `inventory_snapshot.csv` | 21,228 | 6 |
+| `sales_transactions.csv` | 9,972,038 | 11 |
+| `sku_inventory_flags.csv` | 600 | 6 |
+
+- Even the `clean` folder has injected stockouts (the matching sales are removed) and slow movers. `sku_inventory_flags.csv` is the answer key: 200 `STOCKOUT_RISK` and 400 `SLOW_MOVER` rows.
 - About 13k sales lines are exact duplicates; Step 2 removes them.
-- The two `sales_transactions.csv` files are not in git (too large); see "Data setup" in the [README](../README.md).
+- `sales_transactions.csv` is not in git (too large); see "Data setup" in the [README](../README.md).
 
 ## Column Reference
 

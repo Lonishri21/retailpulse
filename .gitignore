@@ -22,5 +22,4 @@ Thumbs.db
 
 # raw sales files are too big for GitHub (see README)
 retail_clean_dataset/sales_transactions.csv
-retail_contaminated_dataset/sales_transactions.csv
 
