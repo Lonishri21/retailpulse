@@ -8,7 +8,7 @@ import streamlit as st  # noqa: E402
 from utils import SEGMENT_COLORS, SEGMENTS, load_csv, page, pkr  # noqa: E402
 from src.segmentation import SEGMENT_ACTIONS  # noqa: E402
 
-page("Customer segments", "Five segments from K-Means on recency, frequency and spend (Step 3).")
+page("Customer segments", "Six segments from K-Means on recency, frequency and spend (Step 3).")
 
 seg = load_csv("customer_segments.csv")
 churn = load_csv("customer_churn.csv")[["customer_id", "churn_prob", "risk_band"]]

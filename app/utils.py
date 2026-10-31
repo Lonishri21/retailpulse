@@ -9,9 +9,9 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA, FIG, RAW = ROOT / "data" / "processed", ROOT / "reports" / "figures", ROOT / "retail_clean_dataset"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+from src.segmentation import SEGMENT_ORDER as SEGMENTS  # noqa: E402
 
-SEGMENTS = ["Champions", "Loyal", "Regulars", "Occasional", "Slipping Away"]
-SEGMENT_COLORS = dict(zip(SEGMENTS, ["#2E5EAA", "#4C9F70", "#E0A030", "#C8553D", "#7A6FA8"]))
+SEGMENT_COLORS = dict(zip(SEGMENTS, ["#2E5EAA", "#4C9F70", "#E0A030", "#C8553D", "#D98C9E", "#7A6FA8"]))
 RISK_COLORS = {"Low": "#4C9F70", "Medium": "#E0A030", "High": "#C8553D"}
 
 

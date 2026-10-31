@@ -39,7 +39,7 @@ churn = load_csv("customer_churn.csv")
 sim = load_csv("inventory_simulation.csv")
 cost = sim.groupby("policy")["total_cost"].sum()
 k1, k2, k3, k4 = st.columns(4)
-k1.metric("Customer segments", "5", help="K-Means on recency, frequency and spend")
+k1.metric("Customer segments", f"{load_csv('customer_segments.csv')['Segment'].nunique()}", help="K-Means on recency, frequency and spend")
 k2.metric("Churn model ROC-AUC (test)", f"{runs.loc['xgboost_baseline', 'test_ROC_AUC']:.2f}",
           help="Out-of-time test quarter (Oct–Dec 2025)")
 k3.metric("Weekly forecast error (test)", f"{fcmp.loc['Hybrid', 'test weekly WAPE %']:.1f}%", help="WAPE of the hybrid forecast")

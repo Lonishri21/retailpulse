@@ -67,6 +67,6 @@ def test_rfm_rules():
 
 
 def test_cluster_names_follow_profiles():
-    df = pd.DataFrame({"recency_days": [1, 1, 1, 1, 9], "frequency": [900, 700, 400, 300, 350]})
-    names = name_clusters(df, labels=[0, 1, 2, 3, 4])
-    assert names == {4: "Slipping Away", 0: "Champions", 1: "Loyal", 2: "Regulars", 3: "Occasional"}
+    df = pd.DataFrame({"recency_days": [1, 1, 1, 1, 5, 9], "frequency": [900, 700, 400, 300, 500, 350]})
+    names = name_clusters(df, labels=[0, 1, 2, 3, 4, 5])
+    assert names == {5: "Slipping Away", 4: "Cooling Off", 0: "Champions", 1: "Loyal", 2: "Regulars", 3: "Occasional"}
